@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default function Header() {
+export default function Header(props) {
     const day = new Date().getDate();
     const month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
@@ -13,10 +13,10 @@ export default function Header() {
             <Text style={styles.data}>{day}/{month}/{year}</Text>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {}}>
+                    onPress={() => {props.nav.navigate('Agendamento')}}>
                     <Text style={styles.plus}>+</Text>
                 </TouchableOpacity>
-                />
+
             </View>
         </View>
     );
@@ -24,7 +24,6 @@ export default function Header() {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
         marginTop: 40,
         backgroundColor: '#4ea1b9',
         alignItems: 'center',

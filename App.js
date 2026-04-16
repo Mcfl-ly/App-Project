@@ -1,25 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import Header from './components/Header';
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import MainScreen from './components/Main-Screen/index';
+import Agendamento from './components/Add-Activity-Screen/index'
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-      <View style={styles.container}>
-        <Header />
-      <ScrollView>
+  <NavigationContainer>
+    <Stack.Navigator id ={undefined} initialRouteName="MainScreen">
+      <Stack.Screen name="MainScreen" component={MainScreen} />
+      <Stack.Screen name="Agendamento" component={Agendamento} />
 
-
-      <StatusBar style="auto" />
-      </ScrollView>
-      </View>
+    </Stack.Navigator>
+  </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
