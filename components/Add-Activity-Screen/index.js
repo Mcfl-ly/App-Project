@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react'
 
 import Header from '../Header/index';
 
-export default function ExpandingBorderInputs() {
+export default function Agendamento() {
   const borderAnim1 = useRef(new Animated.Value(0)).current;
   const borderAnim2 = useRef(new Animated.Value(0)).current;
   const borderAnim3 = useRef(new Animated.Value(0)).current;
@@ -31,17 +31,40 @@ export default function ExpandingBorderInputs() {
     borderColor: '#4A90E2',
   });
 
-  const [ativo, setAtivo] = useState(false)
-  const [seg, setSeg] = useState(false)
-  const [ter, setTer] = useState(false)
-  const [qua, setQua] = useState(false)
-  const [qui, setQui] = useState(false)
-  const [sex, setSex] = useState(false)
-  const [sab, setSab] = useState(false)
-  const [dom, setDom] = useState(false)
+  const [ativo, setAtivo] = useState(false);
+  const [seg, setSeg] = useState(false);
+  const [ter, setTer] = useState(false);
+  const [qua, setQua] = useState(false);
+  const [qui, setQui] = useState(false);
+  const [sex, setSex] = useState(false);
+  const [sab, setSab] = useState(false);
+  const [dom, setDom] = useState(false);
 
-  const dias = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM']
-  const diasVar = [seg, ter, qua, qui, sex, sab, dom]
+  const diasVar = [seg, ter, qua, qui, sex, sab, dom];
+  const diasStr = [];
+
+  const [atvName, setAtvName] = useState(null)
+  const [data, setData] = useState(null)
+  const [atvDesc, setAtvDesc] = useState(null)
+
+  function CreateDaysList() {
+    if (diasVar[0] === true) {
+      diasStr.push('seg')
+    } if (diasVar[1] === true) {
+      diasStr.push('ter')
+    } if (diasVar[2] === true) {
+      diasStr.push('qua')
+    } if (diasVar[3] === true) {
+      diasStr.push('qui')
+    } if (diasVar[4] === true) {
+      diasStr.push('sex')
+    } if (diasVar[5] === true) {
+      diasStr.push('sab')
+    } if (diasVar[6] === true) {
+      diasStr.push('dom')
+    }
+    console.log(diasStr)
+  }
   return (
     <View style={{ padding: 16 }}>
       {/* Primeiro input */}
@@ -51,6 +74,7 @@ export default function ExpandingBorderInputs() {
           placeholder="Nome da Atividade"
           onFocus={() => animateBorder(borderAnim1, 1)}
           onBlur={() => animateBorder(borderAnim1, 0)}
+          onChangeText={setAtvName}
         />
       </Animated.View>
 
@@ -58,20 +82,22 @@ export default function ExpandingBorderInputs() {
       <Animated.View style={[styles.container, createAnimatedStyle(borderAnim2)]}>
         <TextInput
           style={styles.input}
-          placeholder="Data"
+          placeholder="Data: dd-mm-aaaa"
           onFocus={() => animateBorder(borderAnim2, 1)}
           onBlur={() => animateBorder(borderAnim2, 0)}
+          onChangeText={setData}
         />
       </Animated.View>
 
-      <Animated.View style={[styles.container, createAnimatedStyle(borderAnim3)]}>
+      {/* <Animated.View style={[styles.container, createAnimatedStyle(borderAnim3)]}>
         <TextInput
           style={styles.input}
           placeholder="Tempo Reservado"
           onFocus={() => animateBorder(borderAnim3, 1)}
           onBlur={() => animateBorder(borderAnim3, 0)}
+          onChangeText={}
         />
-      </Animated.View>
+      </Animated.View> */}
 
       <Animated.View style={[styles.container, createAnimatedStyle(borderAnim4)]}>
         <TextInput
@@ -80,6 +106,7 @@ export default function ExpandingBorderInputs() {
           multiline={true}
           onFocus={() => animateBorder(borderAnim4, 1)}
           onBlur={() => animateBorder(borderAnim4, 0)}
+          onChangeText={setAtvDesc}
         />
       </Animated.View>
 
@@ -212,8 +239,14 @@ export default function ExpandingBorderInputs() {
           </Pressable>
         )}
       </View>
+      <Button
+        title='testar'
+        onPress={CreateDaysList}
 
+
+      />
     </View>
+
   );
 }
 
@@ -258,8 +291,10 @@ const styles = StyleSheet.create({
   },
   buttonDays: {
     marginRight: 5,
-    padding: 13,
+    padding: 7,
     borderWidth: 1,
     borderColor: '#4A90E2',
   }
 });
+
+
