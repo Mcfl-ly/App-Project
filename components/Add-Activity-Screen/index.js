@@ -1,10 +1,56 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, TextInput, Animated, Button, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, Animated, Button, Pressable, Alert } from 'react-native';
 import React, { useRef, useState } from 'react'
-
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Data from './data'
 import Header from '../Header/index';
 
+
+import { useSQLiteContext } from 'expo-sqlite';
+
+
+
 export default function Agendamento() {
+  let titleBool = false
+  let descriptionBool = false
+
+  function checkTitle(title) {
+    if (title !== '') {
+      titleBool = true;
+    }
+  }
+  function checkDesc(description) {
+    if (description !== '') {
+      descriptionBool = true;
+    }
+  }
+
+
+  const db = useSQLiteContext();
+  const addItem = async (titulo, descricao, data) => {
+    checkTitle(atvName)
+    checkDesc(descricao)
+    if (titleBool && descriptionBool) {
+      try {
+        const resultado = await db.runAsync(
+            'INSERT INTO atividades (nome, data, descricao) VALUES (?, ?, ?)',
+            [atvName, dataSql, atvDesc]
+        );
+        Alert.alert("Sucesso", "Atividade salva com sucesso!");
+        const allDados = await db.getAllAsync('SELECT * FROM atividades WHERE id = 7');
+        console.log(allDados);
+
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      Alert.alert("Erro", "Preencha todos os campos!");
+    }
+  }
+
+
+
+
   const borderAnim1 = useRef(new Animated.Value(0)).current;
   const borderAnim2 = useRef(new Animated.Value(0)).current;
   const borderAnim3 = useRef(new Animated.Value(0)).current;
@@ -31,40 +77,18 @@ export default function Agendamento() {
     borderColor: '#4A90E2',
   });
 
-  const [ativo, setAtivo] = useState(false);
-  const [seg, setSeg] = useState(false);
-  const [ter, setTer] = useState(false);
-  const [qua, setQua] = useState(false);
-  const [qui, setQui] = useState(false);
-  const [sex, setSex] = useState(false);
-  const [sab, setSab] = useState(false);
-  const [dom, setDom] = useState(false);
+  const [atvName, setAtvName] = useState('')
+  const [atvDesc, setAtvDesc] = useState('')
+  const [dataFinal, setDataFinal] = useState('')
+  const [dataSql, setDataSql] = useState('')
 
-  const diasVar = [seg, ter, qua, qui, sex, sab, dom];
-  const diasStr = [];
-
-  const [atvName, setAtvName] = useState(null)
-  const [data, setData] = useState(null)
-  const [atvDesc, setAtvDesc] = useState(null)
-
-  function CreateDaysList() {
-    if (diasVar[0] === true) {
-      diasStr.push('seg')
-    } if (diasVar[1] === true) {
-      diasStr.push('ter')
-    } if (diasVar[2] === true) {
-      diasStr.push('qua')
-    } if (diasVar[3] === true) {
-      diasStr.push('qui')
-    } if (diasVar[4] === true) {
-      diasStr.push('sex')
-    } if (diasVar[5] === true) {
-      diasStr.push('sab')
-    } if (diasVar[6] === true) {
-      diasStr.push('dom')
-    }
-    console.log(diasStr)
+  function printar() {
+    console.log(atvName);
+    console.log(atvDesc);
+    console.log(dataFinal)
+    console.log(dataSql)
   }
+
   return (
     <View style={{ padding: 16 }}>
       {/* Primeiro input */}
@@ -79,15 +103,15 @@ export default function Agendamento() {
       </Animated.View>
 
       {/* Segundo input */}
-      <Animated.View style={[styles.container, createAnimatedStyle(borderAnim2)]}>
-        <TextInput
-          style={styles.input}
-          placeholder="Data: dd-mm-aaaa"
-          onFocus={() => animateBorder(borderAnim2, 1)}
-          onBlur={() => animateBorder(borderAnim2, 0)}
-          onChangeText={setData}
-        />
-      </Animated.View>
+      {/*<Animated.View style={[styles.container, createAnimatedStyle(borderAnim2)]}>*/}
+      {/*  <TextInput*/}
+      {/*    style={styles.input}*/}
+      {/*    placeholder="Data: dd-mm-aaaa"*/}
+      {/*    onFocus={() => animateBorder(borderAnim2, 1)}*/}
+      {/*    onBlur={() => animateBorder(borderAnim2, 0)}*/}
+      {/*    onChangeText={setData}*/}
+      {/*  />*/}
+      {/*</Animated.View>*/}
 
       {/* <Animated.View style={[styles.container, createAnimatedStyle(borderAnim3)]}>
         <TextInput
@@ -109,141 +133,13 @@ export default function Agendamento() {
           onChangeText={setAtvDesc}
         />
       </Animated.View>
+      <Data onSelect={(valor) => setDataFinal(valor)}
+            onSql={(valor2) => setDataSql(valor2)}/>
 
-      <View style={styles.repeatView}>
-
-        <Text
-          style={styles.inputRep}
-          placeholder="Repetir?"
-        >Repetir?</Text>
-
-        <Pressable
-          style={[
-            styles.button,
-            { backgroundColor: ativo ? '#f57b60' : '#4A90E2' }
-
-          ]}
-          onPress={() => setAtivo(!ativo)} // alterna o estado
-        >
-          <Text style={styles.text}>
-            {ativo ? 'NÃO' : 'SIM'}
-          </Text>
-        </Pressable>
-      </View>
-
-      {/* BOTOES COM OS DIAS */}
-      <View style={styles.daysView}>
-        {ativo && (
-
-          <Pressable
-            style={[
-              styles.buttonDays,
-              { backgroundColor: seg ? '#4ae25e' : 'white' }
-
-            ]}
-            onPress={() => setSeg(!seg)} // alterna o estado
-          >
-            <Text style={styles.text}>
-              {seg ? 'SEG' : 'SEG'}
-            </Text>
-          </Pressable>
-        )}
-        {ativo && (
-
-          <Pressable
-            style={[
-              styles.buttonDays,
-              { backgroundColor: ter ? '#4ae25e' : 'white' }
-
-            ]}
-            onPress={() => setTer(!ter)} // alterna o estado
-          >
-            <Text style={styles.text}>
-              {ter ? 'TER' : 'TER'}
-            </Text>
-          </Pressable>
-        )}
-        {ativo && (
-
-          <Pressable
-            style={[
-              styles.buttonDays,
-              { backgroundColor: qua ? '#4ae25e' : 'white' }
-
-            ]}
-            onPress={() => setQua(!qua)} // alterna o estado
-          >
-            <Text style={styles.text}>
-              {ter ? 'QUA' : 'QUA'}
-            </Text>
-          </Pressable>
-        )}
-        {ativo && (
-
-          <Pressable
-            style={[
-              styles.buttonDays,
-              { backgroundColor: qui ? '#4ae25e' : 'white' }
-
-            ]}
-            onPress={() => setQui(!qui)} // alterna o estado
-          >
-            <Text style={styles.text}>
-              {qui ? 'QUI' : 'QUI'}
-            </Text>
-          </Pressable>
-        )}
-        {ativo && (
-
-          <Pressable
-            style={[
-              styles.buttonDays,
-              { backgroundColor: sex ? '#4ae25e' : 'white' }
-
-            ]}
-            onPress={() => setSex(!sex)} // alterna o estado
-          >
-            <Text style={styles.text}>
-              {sex ? 'SEX' : 'SEX'}
-            </Text>
-          </Pressable>
-        )}
-        {ativo && (
-
-          <Pressable
-            style={[
-              styles.buttonDays,
-              { backgroundColor: sab ? '#4ae25e' : 'white' }
-
-            ]}
-            onPress={() => setSab(!sab)} // alterna o estado
-          >
-            <Text style={styles.text}>
-              {sab ? 'SAB' : 'SAB'}
-            </Text>
-          </Pressable>
-        )}
-        {ativo && (
-
-          <Pressable
-            style={[
-              styles.buttonDays,
-              { backgroundColor: dom ? '#4ae25e' : 'white' }
-
-            ]}
-            onPress={() => setDom(!dom)} // alterna o estado
-          >
-            <Text style={styles.text}>
-              {dom ? 'DOM' : 'DOM'}
-            </Text>
-          </Pressable>
-        )}
-      </View>
       <Button
-        title='testar'
-        onPress={CreateDaysList}
-
-
+        title='Adicionar Atividade'
+        onPress={addItem}
+        //   onPress={printar}
       />
     </View>
 
@@ -296,5 +192,8 @@ const styles = StyleSheet.create({
     borderColor: '#4A90E2',
   }
 });
+
+
+
 
 
