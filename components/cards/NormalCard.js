@@ -1,22 +1,20 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import * as header from '../Header/index'
+import React from "react";
 
+export default function NormalCard({color,secondColor, expand, funcaoSet,onPress, cardTitle}) {
 
-export default function Header(props) {
-    const day = new Date().getDate();
-    const month = new Date().getMonth() + 1;
-    const year = new Date().getFullYear();
 
     return (
-        <View style={styles.container}>
-        <Text style={styles.title}>Gerenciador de atividades</Text>
+        <View style={[styles.container,{backgroundColor: color} ]}>
+
 
             <View style={styles.header}>
-            <Text style={styles.data}>{day}/{month}/{year}</Text>
+                <Text style={styles.data}>{cardTitle}</Text>
                 <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {props.nav.navigate('Agendamento')}}>
-                    <Text style={styles.plus}>+</Text>
+                    onPress={onPress}
+                    style={[styles.button, {height: 500, backgroundColor: secondColor}]}
+
+                >
                 </TouchableOpacity>
 
             </View>
@@ -27,32 +25,38 @@ export default function Header(props) {
 const styles = StyleSheet.create({
     container: {
         marginTop: 40,
-        backgroundColor: '#4ea1b9',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '90%',
-        borderRadius: 8,
+        width: 370,
+        borderRadius: 20,
         height: 110,
+        overflow: 'hidden',
+        position: 'relative',
+
         top: 0,
     },
     header: {
         flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     data: {
         backgroundColor: 'white',
         padding: 10,
         borderRadius: 10,
-        width: '50%',
+        flex: 1,
+        marginHorizontal: 20,
         textAlign: 'center',
         fontSize: 18
     },
     button: {
-    backgroundColor: 'white',
         padding: 10,
-        borderRadius: '70%',
-        width: 50,
-        height: 50,
-        marginLeft: 10,
+        // borderRadius: '70%',
+        width: 70,
+        height: '100%',
+        marginLeft: 'auto',
+
+
 
     },
     plus: {

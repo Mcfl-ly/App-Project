@@ -19,7 +19,12 @@ export default function Data({onSelect, onSql}) {
         setText(fDate);
 
 
-        let sqld = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate();
+        let ano = tempDate.getFullYear();
+        let mes = String(tempDate.getMonth() + 1).padStart(2, '0');
+        let dia = String(tempDate.getDate()).padStart(2, '0');
+
+        // let sqld = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate();
+        let sqld = `${ano}-${mes}-${dia}`;
         setSqlDate(sqld);
 
         if(onSelect) onSelect(fDate);

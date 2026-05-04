@@ -36,9 +36,8 @@ export default function Agendamento() {
             'INSERT INTO atividades (nome, data, descricao) VALUES (?, ?, ?)',
             [atvName, dataSql, atvDesc]
         );
+
         Alert.alert("Sucesso", "Atividade salva com sucesso!");
-        const allDados = await db.getAllAsync('SELECT * FROM atividades WHERE id = 7');
-        console.log(allDados);
 
       } catch (e) {
         console.error(e);
